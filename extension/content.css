@@ -7,16 +7,19 @@
 .professor-stats {
     display: none;
     position: absolute;
-    background: #005035;
-    color: white;
-    border-radius: 6px;
-    padding: 8px 12px;
-    font-size: 12px;
-    z-index: 9999;
     bottom: 100%;
     left: 0;
+    z-index: 9999;
+    background: #101820;
+    color: white;
+    border-radius: 8px;
+    padding: 10px 12px;
     white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(1, 0, 0, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    min-width: 220px;
 }
 
 .professor-name-plain {
@@ -42,6 +45,13 @@
     border-radius: 6px;
     padding: 8px 12p;
     min-width: 52px;
+}
+
+.rating-number {
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
 }
 
 td[xe-field="instructor"] {
