@@ -1,0 +1,33 @@
+.professor-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.professor-stats {
+    display: none;
+    position: absolute;
+    background: #005035;
+    color: white;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 12px;
+    z-index: 9999;
+    bottom: 100%;
+    left: 0;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(1, 0, 0, 0.3);
+}
+
+.professor-container:hover .professor-stats {
+    display: block;
+}
+
+.professor-stats span {
+    display: block;
+    margin: 3px 0;
+}
+
+td[xe-field="instructor"] {
+    overflow: visible !important;
+}

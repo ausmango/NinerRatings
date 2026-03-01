@@ -6,14 +6,13 @@
     "content_scripts": [
         {
             "matches": [
-        "*://selfservice.uncc.edu/StudentRegistrationSsb/ssb/classSearch/*",
-        "*://selfservice.uncc.edu/StudentRegistrationSsb/ssb/classRegistration/*"
+        "*://selfservice.uncc.edu/StudentRegistrationSsb/*"
             ],
             "js": ["extension/content.js"],
             "css": ["extension/content.css"]
         }
     ],
     "background" : {
-        "service_worker": "extension/background.js"
+        "service_worker": "extension/rmp.js"
     }
 }
