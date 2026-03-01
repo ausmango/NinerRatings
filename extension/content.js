@@ -1,3 +1,13 @@
+function getRatingColor(rating) {
+    if (rating >= 4.0) {
+        return '#2ca25f';
+    } else if (rating >= 3.0) {
+        return '#e9a400';
+    } else {
+        return '#de2d26';
+    }
+}
+
 function injectOverview(cell, data) {
     const overview = document.createElement('div');
     overview.className = 'professor-container';
