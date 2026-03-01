@@ -43,8 +43,14 @@ async function queryRMP(name) {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.professorName) {
         queryRMP(request.professorName)
-            .then(data => sendResponse({success:true ,data}))
-            .catch(err => sendResponse({success:false, error: err.message}));
+            .then(data => {
+                if (data) {
+                    sendResponse({success:true, data});
+                } else {
+                    sendResponse({success: false, error: "Not found"});
+                }
+            })
+            .catch(err => sendResponse({sucess: false, error: err.message}));
         return true;
     }
 });

@@ -15,6 +15,19 @@ function injectOverview(cell, data) {
     cell.appendChild(overview);
 }
 
+function injectNotFound(cell, name) {
+    const overview = document.createElement('div');
+    overview.className = 'professor-container'
+    overview.innerHTML = `
+    <span class ="professor-name-plain">${name}</span>
+    <div class= "professor-stats">
+        <span>ERROR: RMP Data Not Found.</span>
+    </div>
+    `;
+    cell.innerHTML = '';
+    cell.appendChild(overview);
+}
+
 const observer = new MutationObserver(() => {
     const cells = document.querySelectorAll('[xe-field="instructor"]');
     cells.forEach(cell => {
@@ -27,6 +40,8 @@ const observer = new MutationObserver(() => {
             chrome.runtime.sendMessage({ professorName: name }, (response) => {
                 if (response && response.success) {
                     injectOverview(cell, response.data);
+                } else {
+                    injectNotFound(cell, name);
                 }
             });
         }

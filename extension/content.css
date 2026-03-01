@@ -19,6 +19,12 @@
     box-shadow: 0 2px 8px rgba(1, 0, 0, 0.3);
 }
 
+.professor-name-plain {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+}
+
 .professor-container:hover .professor-stats {
     display: block;
 }
