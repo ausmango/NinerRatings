@@ -23,5 +23,10 @@
             "resources": ["fonts/*"],
             "matches": ["*://selfservice.uncc.edu/*"]
         }
-    ]
+    ],
+    "icons": {
+        "16": "icons/logo128.png",
+        "48": "icons/logo128.png",
+        "128": "icons/logo128.png"
+    }
 }
