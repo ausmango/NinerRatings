@@ -29,6 +29,7 @@ async function queryRMP(name) {
     "Referer": "https://www.ratemyprofessors.com"
     }
 
+    console.time('rmp-query');
     const response = await fetch("https://www.ratemyprofessors.com/graphql", {
     method: "POST",
     headers: headers,
@@ -62,6 +63,7 @@ async function queryRMP(name) {
         `
         })
     });
+    console.timeEnd('rmp-query');
     const data = await response.json();
     const professors = data.data.newSearch.teachers.edges;
     if (!professors.length) {

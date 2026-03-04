@@ -101,25 +101,31 @@ const observer = new MutationObserver(() => {
     cells.forEach(cell => {
         if (cell.dataset.ninerProcessed) return;
         cell.dataset.ninerProcessed = "true";
-        const anchor = cell.querySelector('a.email');
-        if (anchor) {
-            const name = anchor.textContent.trim();
-            anchor.textContent = '...';
-            try {
-                chrome.runtime.sendMessage({ professorName: name }, (response) => {
-                    if (response && response.success) {
-                        injectOverview(cell, response.data);
-                    } else {
-                        injectNotFound(cell, name);
-                    }
-                });
-            } catch(e) {
-                anchor.textContent = name;
-                cell.dataset.ninerProcessed ="";
-            }
+        const anchors = cell.querySelectorAll('a.email');
+        if (anchors.length > 0) {
+            cell.innerHTML = '';
+            anchors.forEach(anchor => {
+                const name = anchor.textContent.trim();
+                const wrapper = document.createElement('div');
+                wrapper.textContent = '...';
+                cell.appendChild(wrapper);
+                try {
+                    chrome.runtime.sendMessage({ professorName: name }, (response) => {
+                        if (response && response.success) {
+                            injectOverview(wrapper, response.data);
+                        } else {
+                            injectNotFound(wrapper, name);
+                        }
+                    });
+                } catch(e) {
+                    wrapper.textContent = name;
+                    cell.dataset.ninerProcessed ="";
+                }
+            })
         }
     });
 });
+
 observer.observe(document.body, {
     childList: true,
     subtree: true
