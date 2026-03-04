@@ -1,3 +1,26 @@
+function namesMatch(searchName, firstName, lastName) {
+    const fullRMP = `${firstName} ${lastName}`.toLowerCase().trim();
+    const search = searchName.toLowerCase().trim();
+
+    if (search === fullRMP) {
+        return true;
+    }
+
+    const searchLast = search.split(' ').pop();
+    const rmpLast = lastName.toLowerCase();
+    if (searchLast != rmpLast) {
+        return false;
+    }
+
+    const searchFirst = search.split(' ')[0];
+    const rmpFirst = firstName.toLowerCase();
+    if (rmpFirst.startsWith(searchFirst) || searchFirst.startsWith(rmpFirst)) {
+        return true;
+    }
+    return false;
+}
+
+
 async function queryRMP(name) {
     const headers = {
     "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Mobile Safari/537.36",
@@ -24,6 +47,13 @@ async function queryRMP(name) {
                             wouldTakeAgainPercent
                             numRatings
                             department
+                            ratings(first: 1) { 
+                                edges {
+                                    node {
+                                        date
+                                    }
+                                }
+                            }   
                         }
                     }
                 }
@@ -37,7 +67,15 @@ async function queryRMP(name) {
     if (!professors.length) {
         return null;
     }
-    return professors[0].node;
+
+    const match = professors.find(edge =>
+        namesMatch(name, edge.node.firstName, edge.node.lastName)
+    );
+    const prof = match.node
+    
+    const lastRating = prof.ratings?.edges[0]?.node?.date || null;
+    prof.lastRating = lastRating;
+    return prof;
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
