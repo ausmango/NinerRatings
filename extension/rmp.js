@@ -1,3 +1,18 @@
+const CACHE_DURATION = 7 * 24 * 60 * 60 * 1000; //1 day
+const CACHE_SIZE = 100;
+
+async function maintainCacheSize() {
+    const allItems = await chrome.storage.local.get(null);
+    const entries = Object.entries(allItems)
+        .filter(([, value]) => value && value.timestamp)
+        .sort(([, a], [, b]) => a.timestamp - b.timestamp);
+
+    if (entries.length >= CACHE_SIZE) {
+        const toDelete = entries.slice(0, 50).map(([key]) => key);
+        await chrome.storage.local.remove(toDelete);
+    }
+}
+
 function namesMatch(searchName, firstName, lastName) {
     const fullRMP = `${firstName} ${lastName}`.toLowerCase().trim();
     const search = searchName.toLowerCase().trim();
@@ -22,14 +37,22 @@ function namesMatch(searchName, firstName, lastName) {
 
 
 async function queryRMP(name) {
+    const cacheKey = `rmp_${name.toLowerCase().trim()}`;
+
+    const stored = await chrome.storage.local.get(cacheKey);
+    const cached = stored[cacheKey];
+
+    if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
+
+        return cached.data;
+    }
+
     const headers = {
     "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Mobile Safari/537.36",
     "Content-Type": "application/json",
     "Origin": "https://www.ratemyprofessors.com",
     "Referer": "https://www.ratemyprofessors.com"
     }
-
-    console.time('rmp-query');
     const response = await fetch("https://www.ratemyprofessors.com/graphql", {
     method: "POST",
     headers: headers,
@@ -63,20 +86,33 @@ async function queryRMP(name) {
         `
         })
     });
-    console.timeEnd('rmp-query');
+
     const data = await response.json();
     const professors = data.data.newSearch.teachers.edges;
+
     if (!professors.length) {
+        await chrome.storage.local.set({ [cacheKey]: {data : null, timestamp: Date.now()}});
+        console.log('💾 Cached:', name);
+
         return null;
     }
 
     const match = professors.find(edge =>
         namesMatch(name, edge.node.firstName, edge.node.lastName)
     );
-    const prof = match.node
     
+    if (!match) {
+        await chrome.storage.local.set({ [cacheKey]: { data: null, timestamp: Date.now()}});
+    }
+    
+
+    const prof = match.node
     const lastRating = prof.ratings?.edges[0]?.node?.date || null;
     prof.lastRating = lastRating;
+
+    await maintainCacheSize();
+    await chrome.storage.local.set({ [cacheKey]: { data: prof, timestamp: Date.now()}});
+    
     return prof;
 }
 
