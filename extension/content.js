@@ -45,6 +45,19 @@ function injectOverview(cell, data, originalName) {
     `;
     cell.innerHTML = '';
     cell.appendChild(overview);
+    const link = overview.querySelector('.professor-name');
+    link.style.setProperty('color', '#2e6da4', 'important');
+
+    link.addEventListener('blur', () => {
+        link.style.setProperty('color', '#2e6da4', 'important');
+    });
+
+    link.addEventListener('click', () => {
+        setTimeout(() => {
+            link.style.setProperty('color', '#2e6da4', 'important');
+        }, 100);
+    });
+
 
     overview.addEventListener('mouseenter', () => {
         const stats = overview.querySelector('.professor-stats');

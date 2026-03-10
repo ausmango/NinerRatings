@@ -49,8 +49,9 @@
 
 
 .professor-name {
-    color: #005035;
-    text-decoration: none;
+    color: #2e6da4 !important;
+    text-decoration: none !important;
+    text-underline-offset: 2px;
     font-weight: 600;
     font-size: 12px;
     letter-spacing: 0.01em;
@@ -61,9 +62,9 @@
     display: block;
 }
 
-
 .professor-name:hover {
-    text-decoration: underline;
+    color: #2e6da4 !important;
+    text-decoration: underline !important;
 }
 
 .professor-name, .professor-name-plain {
@@ -129,7 +130,6 @@
 .low-ratings-warning {
     margin-left: 3px;
     font-size: 13px;
-    color: rgba(255,255,255,0.5);
     display: block;
     text-align: center;
     width: 100%;
