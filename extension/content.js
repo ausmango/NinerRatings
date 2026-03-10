@@ -45,20 +45,20 @@ function injectOverview(cell, data, originalName) {
     cell.appendChild(overview);
 
     overview.addEventListener('mouseenter', () => {
-    const stats = overview.querySelector('.professor-stats');
-    const rect = overview.getBoundingClientRect();
+        const stats = overview.querySelector('.professor-stats');
+        const rect = overview.getBoundingClientRect();
 
-    stats.style.position = 'fixed';
-    stats.style.top = rect.top + 'px';
-    stats.style.left = (rect.right + 5) + 'px';
+        stats.style.position = 'fixed';
+        stats.style.top = (rect.top - 100) + 'px';
+        stats.style.left = (rect.right + 5) + 'px';
 
-    if (rect.right + 220 > window.innerWidth) {
-        stats.style.left = (rect.left - 225) + 'px';
-    }
+        if (rect.right + 220 > window.innerWidth) {
+            stats.style.left = (rect.left - 225) + 'px';
+        }
 
-    if (rect.top < 0) {
-        stats.style.top = rect.bottom + 'px';
-    }
+        if (rect.top < 0) {
+            stats.style.top = rect.bottom + 'px';
+        }
 });
 }
 
@@ -83,20 +83,20 @@ function injectNotFound(cell, name) {
     cell.appendChild(overview);
 
     overview.addEventListener('mouseenter', () => {
-    const stats = overview.querySelector('.professor-stats');
-    const rect = overview.getBoundingClientRect();
+        const stats = overview.querySelector('.professor-stats');
+        const rect = overview.getBoundingClientRect();
 
-    stats.style.position = 'fixed';
-    stats.style.top = rect.top + 'px';
-    stats.style.left = (rect.right + 5) + 'px';
+        stats.style.position = 'fixed';
+        stats.style.top = (rect.top - 100) + 'px';
+        stats.style.left = (rect.right + 5) + 'px';
 
-    if (rect.right + 220 > window.innerWidth) {
-        stats.style.left = (rect.left - 225) + 'px';
-    }
+        if (rect.right + 220 > window.innerWidth) {
+            stats.style.left = (rect.left - 225) + 'px';
+        }
 
-    if (rect.top < 0) {
-        stats.style.top = rect.bottom + 'px';
-    }
+        if (rect.top < 0) {
+            stats.style.top = rect.bottom + 'px';
+        }
 });
 }
 

@@ -1,4 +1,4 @@
-const CACHE_DURATION = 7 * 24 * 60 * 60 * 1000; //1 day cache size
+const CACHE_DURATION = 7 * 24 * 60 * 60 * 1000; //1 week cache size
 const CACHE_SIZE = 100;
 
 async function maintainCacheSize() {
@@ -43,7 +43,7 @@ async function queryRMP(name) {
     const cached = stored[cacheKey];
 
     if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
-
+        console.log('Cache hit:', name, '| data:', cached.data === null ? 'null (not found)' : 'found');
         return cached.data;
     }
 
