@@ -1,5 +1,8 @@
 const CACHE_DURATION = 7 * 24 * 60 * 60 * 1000; //1 week cache size
 const CACHE_SIZE = 100;
+const CACHE_VERSION = 'v1';
+const REPLACEMENTS = {
+};
 
 async function maintainCacheSize() {
     const allItems = await chrome.storage.local.get(null);
@@ -31,6 +34,8 @@ function namesMatch(searchName, firstName, lastName) {
     
     const searchFirst = search.split(' ')[0];
     const rmpFirst = firstName.toLowerCase();
+    console.log('Comparing:', search, '|', fullRMP);
+
 
     if (rmpFirst.startsWith(searchFirst) || searchFirst.startsWith(rmpFirst)) {
         return true;
@@ -39,14 +44,19 @@ function namesMatch(searchName, firstName, lastName) {
 }
 
 async function queryRMP(name) {
-    const cacheKey = `rmp_${name.toLowerCase().trim()}`;
+    const resolvedName = REPLACEMENTS[name] || name;
+    const cacheKey = `rmp_${CACHE_VERSION}_${resolvedName.toLowerCase().trim()}`;
 
     const stored = await chrome.storage.local.get(cacheKey);
     const cached = stored[cacheKey];
 
+    console.log('Looking up cache key:', cacheKey);
     if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
+        console.log('Cache hit: ', cacheKey, '| data:', cached.data === null ? 'null' : 'found');
         return cached.data;
     }
+    console.log('Cache miss:', cacheKey);
+    console.log('Resolved name: ', name, '->', resolvedName);
 
     const headers = {
     "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Mobile Safari/537.36",
@@ -54,6 +64,7 @@ async function queryRMP(name) {
     "Origin": "https://www.ratemyprofessors.com",
     "Referer": "https://www.ratemyprofessors.com"
     }
+    console.log('Resolved name being searched:', resolvedName);
     const response = await fetch("https://www.ratemyprofessors.com/graphql", {
     method: "POST",
     headers: headers,
@@ -61,7 +72,7 @@ async function queryRMP(name) {
         query: `
         query {
             newSearch {
-                teachers(query: {text: "${name}", schoolID: "U2Nob29sLTEyNTM="}) {
+                teachers(query: {text: "${resolvedName}", schoolID: "U2Nob29sLTEyNTM="}) {
                     edges {
                         node {
                             legacyId
@@ -90,6 +101,7 @@ async function queryRMP(name) {
 
     const data = await response.json();
     const professors = data.data.newSearch.teachers.edges;
+    console.log('RMP results:', professors.map(e => `${e.node.firstName} ${e.node.lastName}`));
 
     if (!professors.length) {
         await chrome.storage.local.set({ [cacheKey]: {data : null, timestamp: Date.now()}});
@@ -97,7 +109,7 @@ async function queryRMP(name) {
     }
 
     const matches = professors.filter(edge => {
-        return namesMatch(name, edge.node.firstName, edge.node.lastName)
+        return namesMatch(resolvedName, edge.node.firstName, edge.node.lastName)
     });
     
     if (!matches.length) {
