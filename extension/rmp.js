@@ -1,4 +1,4 @@
-const CACHE_DURATION = 7 * 24 * 60 * 60 * 1000; //1 week cache size
+const CACHE_DURATION = 3 * 24 * 60 * 60 * 1000; //3 day cache size
 const CACHE_SIZE = 100;
 const CACHE_VERSION = 'v1';
 const REPLACEMENTS = {

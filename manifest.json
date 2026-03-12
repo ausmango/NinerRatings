@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "NinerRatings",
     "version": "1.0",
-    "description": "Chrome extension to improve UNCC class registration and browse process",
+    "description": "Chrome extension that embeds RateMyProfessors data directly into UNCC course registration portal",
     "author": "austinkmangold@gmail.com",
     "homepage_url": "https://github.com/ausmango/NinerRatings",
     "permissions": ["storage"],
