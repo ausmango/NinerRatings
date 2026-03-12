@@ -1,6 +1,9 @@
 # NinerRatings ⛏️
 Tired of manually looking up every professor to see their ratings? I built NinerRatings to help Charlotte students and their registration process. Instead of frantically switching between tabs to pick the best option, this extension directly embeds the data right in your portal!
 
+## Link
+Web Store: https://chromewebstore.google.com/detail/ninerratings/fiboihoabbagmckkhjbbeiaoiiimfaec 
+
 ## Features
 - 🔗 Embedded hyperlink in each professor name for fast look-up
 
