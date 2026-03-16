@@ -13,7 +13,7 @@ Web Store: https://chromewebstore.google.com/detail/ninerratings/fiboihoabbagmck
 
 - Supports multiple professors per course selection
 
-- 7-day Chrome Storage caching for near-instant repeat lookups
+- 3-day Chrome Storage caching for near-instant repeat lookups
 
 ## Version
 Current version: **1.0 INITIAL RELEASE**
