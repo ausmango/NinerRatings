@@ -3,7 +3,8 @@ const CACHE_SIZE = 100;
 const CACHE_VERSION = 'v1';
 const REPLACEMENTS = {
     "Ree Linker": "Jeanne-Marie Linker",
-    "Hamid Baradaran Shoraka" : "Hamid Shoraka"
+    "Hamid Baradaran Shoraka" : "Hamid Shoraka",
+    "Maria Guimaraes Biagini" : "Maria Guimaraes"
 };
 
 async function maintainCacheSize() {
@@ -44,7 +45,7 @@ function namesMatch(searchName, firstName, lastName) {
 }
 
 async function queryRMP(name) {
-    const resolvedName = REPLACEMENTS[name] || name;
+    const resolvedName = REPLACEMENTS[name] || name; 
     const cacheKey = `rmp_${CACHE_VERSION}_${resolvedName.toLowerCase().trim()}`;
 
     const stored = await chrome.storage.local.get(cacheKey);
