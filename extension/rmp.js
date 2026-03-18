@@ -4,8 +4,9 @@ const CACHE_VERSION = 'v1';
 const REPLACEMENTS = {
     "Ree Linker": "Jeanne-Marie Linker",
     "Hamid Baradaran Shoraka" : "Hamid Shoraka",
-    "Maria Guimaraes Biagini" : "Maria Guimaraes"
-};
+    "Maria Guimaraes Biagini" : "Maria Guimaraes",
+    "Dave Naylor" : "David Naylor"
+}; //manual replacements
 
 async function maintainCacheSize() {
     const allItems = await chrome.storage.local.get(null);
@@ -20,14 +21,14 @@ async function maintainCacheSize() {
 }
 
 function namesMatch(searchName, firstName, lastName) {
-    const fullRMP = `${firstName} ${lastName}`.toLowerCase().trim();
-    const search = searchName.toLowerCase().trim();
+    const normalize = (str) => str.toLowerCase().trim().replace(/[u2018\u2019]/g, "'");
+    const fullRMP = normalize(`${firstName} ${lastName}`);
+    const search = normalize(searchName);
 
     if (search === fullRMP) {
         return true;
     }
 
-    
     const searchLast = search.split(' ').pop();
     const rmpLast = lastName.toLowerCase();
 
@@ -37,7 +38,7 @@ function namesMatch(searchName, firstName, lastName) {
     
     const searchFirst = search.split(' ')[0];
     const rmpFirst = firstName.toLowerCase();
-
+    
     if (rmpFirst.startsWith(searchFirst) || searchFirst.startsWith(rmpFirst)) {
         return true;
     }
@@ -46,6 +47,7 @@ function namesMatch(searchName, firstName, lastName) {
 
 async function queryRMP(name) {
     const resolvedName = REPLACEMENTS[name] || name; 
+    const queryName = resolvedName
     const cacheKey = `rmp_${CACHE_VERSION}_${resolvedName.toLowerCase().trim()}`;
 
     const stored = await chrome.storage.local.get(cacheKey);
@@ -68,7 +70,7 @@ async function queryRMP(name) {
         query: `
         query {
             newSearch {
-                teachers(query: {text: "${resolvedName}", schoolID: "U2Nob29sLTEyNTM="}) {
+                teachers(query: {text: "${queryName}", schoolID: "U2Nob29sLTEyNTM="}) {
                     edges {
                         node {
                             legacyId
