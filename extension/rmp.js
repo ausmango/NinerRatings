@@ -4,6 +4,7 @@ const CACHE_VERSION = 'v2';
 const REPLACEMENTS = {
     "Ree Linker": "Jeanne-Marie Linker",
     "Hamid Baradaran Shoraka" : "Hamid Shoraka",
+    "Manuel Perez Quinones" : "Manuel Quinones",
     "Maria Guimaraes Biagini" : "Maria Guimaraes",
     "Dave Naylor" : "David Naylor",
     "Jay Wu" : "Jy Wu",
@@ -14,7 +15,17 @@ const REPLACEMENTS = {
     "Kosta Falaggis" : "Konstantinos Falaggis",
     "Jim Conrad" : "James Conrad",
     "Nigel Zheng" : "Naiquan Zheng",
-    "Gary Teng" : "Teng Gary"
+    "Gary Teng" : "Teng Gary",
+    "Sam Shue" : "Samuel Shue",
+    "Zbyszek Ras" : "Zbigniew Ras",
+    "Tom Moyer" : "Thomas Moyer",
+    "Chao Wang" : "Wiechao Wang",
+    "Carmen Soliz Urrutia" : "Maria Carmen Soliz Urrutia",
+    "Jeffrey Leak" : "Jeffery Leak",
+    "Katie Hogan" : "Kathleen Hogan",
+    "Juan Meneses Naranjo" : "Juan Meneses",
+    "Becky Roeder" : "Rebecca Roeder",
+    "Pilar Blitvich" : "Maria Pilar Garces-Conejos Blitvich"
 }; //manual replacements
 
 async function maintainCacheSize() {
@@ -60,7 +71,7 @@ function namesMatch(searchName, firstName, lastName) {
 
 async function queryRMP(name) {
     const resolvedName = REPLACEMENTS[name] || name; 
-    const queryName = resolvedName
+    const queryName = resolvedName.replace(/['\u2018\u2019]/g, '').trim();
     const cacheKey = `rmp_${CACHE_VERSION}_${resolvedName.toLowerCase().trim()}`;
 
     const stored = await chrome.storage.local.get(cacheKey);
