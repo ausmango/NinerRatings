@@ -4,7 +4,6 @@ const CACHE_VERSION = 'v2';
 const REPLACEMENTS = {
     "Ree Linker": "Jeanne-Marie Linker",
     "Hamid Baradaran Shoraka" : "Hamid Shoraka",
-    "Manuel Perez Quinones" : "Manuel Quinones",
     "Maria Guimaraes Biagini" : "Maria Guimaraes",
     "Dave Naylor" : "David Naylor",
     "Jay Wu" : "Jy Wu",
@@ -56,8 +55,23 @@ function namesMatch(searchName, firstName, lastName) {
     const fullRMP = normalize(`${firstName} ${lastName}`);
     const search = normalize(searchName);
 
-    console.log('[namesMatch] fullRMP char codes:', [...fullRMP].map(c => c.charCodeAt(0)));
-    console.log('[namesMatch] search char codes:', [...search].map(c => c.charCodeAt(0)));
+    console.log('--- NAME MATCH DEBUG ---');
+
+    console.log('Search Name (raw):', searchName);
+    console.log('RMP Name (raw):', `${firstName} ${lastName}`);
+
+    console.log('Search (normalized):', search, '| length:', search.length);
+    console.log('RMP (normalized):', fullRMP, '| length:', fullRMP.length);
+
+    console.log(
+        'Search char codes:',
+        [...search].map(c => `${c}(${c.charCodeAt(0)})`)
+    );
+
+    console.log(
+    'RMP char codes:',
+    [...fullRMP].map(c => `${c}(${c.charCodeAt(0)})`)
+);
     if (search === fullRMP) {
         return true;
     }
@@ -79,12 +93,33 @@ function namesMatch(searchName, firstName, lastName) {
     if (rmpFirst.slice(0, 3) === searchFirst.slice(0, 3)) {
     return true;
     }
+
+    const searchParts = search.split(' ');
+    const rmpParts = fullRMP.split(' ');
+
+    const searchFirstFull = searchParts[0];
+    const searchLastFull = searchParts[searchParts.length - 1];
+    const rmpFirstFull = rmpParts[0];
+    const rmpLastFull = rmpParts[rmpParts.length - 1];
+
+    if (searchFirstFull === rmpLastFull && searchLastFull === rmpFirstFull) {
+        return true;
+    }
+
+    if (
+        (rmpFirstFull.startsWith(searchFirstFull.slice(0, 3)) ||
+         searchFirstFull.startsWith(rmpFirstFull.slice(0, 3))) &&
+        searchLastFull === rmpLastFull
+    ) {
+        return true;
+    }
+
     return false;
 }
 
 async function queryRMP(name) {
     const resolvedName = REPLACEMENTS[name] || name; 
-    const queryName = resolvedName.split(' ').pop().replace(/['\u2018\u2019]/g, '').trim();
+    const queryName = normalize(resolvedName).split(' ').pop();
     const cacheKey = `rmp_${CACHE_VERSION}_${resolvedName.toLowerCase().trim()}`;
 
     console.log('[RMP] Name received:', name);

@@ -14,6 +14,7 @@
     left: 100%;
     z-index: 9999;
     background: #101820;
+    backdrop-filter: blur(8px);
     color: white;
     border-radius: 8px;
     padding: 10px 12px;
